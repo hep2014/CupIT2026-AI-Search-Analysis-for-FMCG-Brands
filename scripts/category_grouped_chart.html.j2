@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page_title }}</title>
+  <style>
+    :root {
+      --bg: #fdf7fc;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --grid: #f3d3ea;
+      --shadow: 0 10px 30px rgba(206, 13, 138, 0.10);
+      --radius: 24px;
+
+      /* P&G */
+      --pg: #ce0d8a;
+      --pg-top: #ff78ca;
+
+      /* конкуренты */
+      --competitor: #00a3e4;
+      --competitor-top: #6ed6ff;
+
+      /* дополнительный акцент */
+      --accent: #ff78ca;
+      --pg-soft: #fbe4f3;
+      --competitor-soft: #e8f7fd;
+      --accent-soft: #fff0fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(206, 13, 138, 0.10) 0%, transparent 30%),
+        radial-gradient(circle at top right, rgba(0, 163, 228, 0.10) 0%, transparent 28%),
+        radial-gradient(circle at bottom center, rgba(255, 120, 202, 0.10) 0%, transparent 34%),
+        var(--bg);
+    }
+
+    .page {
+      width: 1600px;
+      min-height: 950px;
+      padding: 42px;
+    }
+
+    .header {
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--pg-soft);
+      color: var(--pg);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 20px;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--pg), var(--competitor), var(--accent));
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .chart-title {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 0 0 8px;
+    }
+
+    .chart-caption {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .legend-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    .legend-swatch.pg {
+      background: var(--pg);
+    }
+
+    .legend-swatch.competitor {
+      background: var(--competitor);
+    }
+
+    .plot-wrap {
+      margin-top: 18px;
+      padding: 26px 26px 20px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff8fc 0%, #f8fcff 100%);
+      border: 1px solid var(--grid);
+    }
+
+    .plot {
+      position: relative;
+      height: 560px;
+      padding: 24px 12px 120px;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 24px 12px 120px 12px;
+      pointer-events: none;
+    }
+
+    .grid-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1px dashed var(--grid);
+    }
+
+    .grid-line.l1 { top: 0; }
+    .grid-line.l2 { top: 25%; }
+    .grid-line.l3 { top: 50%; }
+    .grid-line.l4 { top: 75%; }
+    .grid-line.l5 { top: 100%; }
+
+    .grid-label {
+      position: absolute;
+      left: -4px;
+      transform: translate(-100%, -50%);
+      font-size: 14px;
+      font-weight: 700;
+      color: #9ca3af;
+      background: transparent;
+    }
+
+    .grid-label.g1 { top: 0; }
+    .grid-label.g2 { top: 25%; }
+    .grid-label.g3 { top: 50%; }
+    .grid-label.g4 { top: 75%; }
+    .grid-label.g5 { top: 100%; }
+
+    .groups {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .group {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .bars {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 34px;
+      padding: 0 10px;
+    }
+
+    .bar-block {
+      width: 132px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .bar-value {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .bar-shell {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .bar {
+      width: 100%;
+      min-height: 16px;
+      border-radius: 22px 22px 10px 10px;
+      box-shadow: inset 0 -10px 20px rgba(255, 255, 255, 0.16);
+    }
+
+    .bar.pg {
+      background: linear-gradient(180deg, var(--pg-top) 0%, var(--pg) 100%);
+    }
+
+    .bar.competitor {
+      background: linear-gradient(180deg, var(--competitor-top) 0%, var(--competitor) 100%);
+    }
+
+    .bar-label {
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .group-meta {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .group-name {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .group-mentions {
+      font-size: 15px;
+      color: #9ca3af;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <div class="eyebrow">{{ eyebrow }}</div>
+      <h1 class="title">{{ main_title }}</h1>
+      <div class="subtitle">{{ subtitle }}</div>
+    </div>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 class="chart-title">Категории</h2>
+          <p class="chart-caption">
+            Для каждой категории показана доля упоминаний P&amp;G и конкурентов.
+          </p>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-swatch pg"></span>
+            <span>P&amp;G</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch competitor"></span>
+            <span>Конкуренты</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="plot-wrap">
+        <div class="plot">
+          <div class="grid-lines">
+            <div class="grid-line l1"></div>
+            <div class="grid-line l2"></div>
+            <div class="grid-line l3"></div>
+            <div class="grid-line l4"></div>
+            <div class="grid-line l5"></div>
+
+            <div class="grid-label g1">100%</div>
+            <div class="grid-label g2">75%</div>
+            <div class="grid-label g3">50%</div>
+            <div class="grid-label g4">25%</div>
+            <div class="grid-label g5">0%</div>
+          </div>
+
+          <div class="groups">
+            {% for item in categories %}
+            <div class="group">
+              <div class="bars">
+                {% for bar in item.bars %}
+                <div class="bar-block">
+                  <div class="bar-value">{{ bar.value_str }}</div>
+                  <div class="bar-shell">
+                    <div
+                      class="bar {{ bar.class_name }}"
+                      style="height: {{ '%.2f'|format(bar.height_pct) }}%;"
+                    ></div>
+                  </div>
+                  <div class="bar-label">{{ bar.label }}</div>
+                </div>
+                {% endfor %}
+              </div>
+
+              <div class="group-meta">
+                <div class="group-name">{{ item.category }}</div>
+                <div class="group-mentions">mention_count: {{ item.mention_count }}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
