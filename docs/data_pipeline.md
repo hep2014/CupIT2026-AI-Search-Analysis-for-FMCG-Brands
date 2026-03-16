@@ -38,8 +38,8 @@
 
 В проекте использовалось несколько схем.
 
-![Первая схема](images/first.png)
-![Вторая схема](images/second.png)
+![Первая схема](images/first.jpg)
+![Вторая схема](images/second.jpg)
 
 
 ### 1. Raw
